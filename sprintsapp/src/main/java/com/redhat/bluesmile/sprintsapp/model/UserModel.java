@@ -5,10 +5,10 @@ import javax.persistence.Entity;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
-import org.springframework.data.mongodb.core.mapping.Document;
+//import org.springframework.data.mongodb.core.mapping.Document;
 
 @Entity
-@Document(collection = "UserModel")
+//@Document(collection = "UserModel")
 public class UserModel {
 
 	@Transient
@@ -30,12 +30,8 @@ public class UserModel {
 	public UserModel() {
 	}
 
-	public UserModel(String name, String lastname, String email, String password, Date createdAt) {
+	public UserModel(String name) {
 		this.name = name;
-		this.lastname = lastname;
-		this.email = email;
-		this.password = password;
-		this.createdAt = createdAt;
 	}
 
 	public long getId() {
@@ -54,14 +50,6 @@ public class UserModel {
 		this.name = name;
 	}
 
-	public String getLastname() {
-		return lastname;
-	}
-
-	public void setLastname(String lastname) {
-		this.lastname = lastname;
-	}
-
 	public String getEmail() {
 		return email;
 	}
@@ -78,18 +66,9 @@ public class UserModel {
 		this.password = password;
 	}
 
-	public Date getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(Date createdAt) {
-		this.createdAt = createdAt;
-	}
-
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", name=" + name + ", lastname=" + lastname + ", email=" + email + ", password="
-				+ password + "]";
+		return "UserModel [id=" + id + ", name=" + name + ", lastname=" + lastname + ", email=" + email + ", password="
+				+ password + ", createdAt=" + createdAt + "]";
 	}
-
 }
