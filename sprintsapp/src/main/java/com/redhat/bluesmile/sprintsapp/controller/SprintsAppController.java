@@ -57,25 +57,25 @@ public class SprintsAppController {
 	@GetMapping("/backlog")
 	public List<BackLog> getAllBacklog() {
 		
-		backLogNULL = mongoOps.findOne(new Query(where("name").is("Joe")), BackLog.class);
+	//backLogNULL = mongoOps.findOne(new Query(where("name").is("Joe")), BackLog.class);
 
-//		List<BackLog> backLog = sprintsAppRepository.findByStatus();
-//
-//		List<BackLog> listNewBacklog = new ArrayList<BackLog>();
-//		for (int i = 0; i < backLog.size(); i++) {
-//			BackLog back = backLog.get(i);
-//			Features[] features = back.getFeatures();
-//			Features[] newFeature = new Features[features.length];
-//			for (int j = 0; j < features.length; j++) {
-//				int featureStatus = features[j].getStatus();
-//				if (featureStatus != 3) {
-//					newFeature[j] = features[j];
-//				}
-//			}
-//			back.setFeatures(newFeature);
-//			listNewBacklog.add(back);
-//		}
-//		return listNewBacklog;
+		List<BackLog> backLog = sprintsAppRepository.findByStatus();
+
+		List<BackLog> listNewBacklog = new ArrayList<BackLog>();
+		for (int i = 0; i < backLog.size(); i++) {
+			BackLog back = backLog.get(i);
+		Features[] features = back.getFeatures();
+		Features[] newFeature = new Features[features.length];
+			for (int j = 0; j < features.length; j++) {
+				int featureStatus = features[j].getStatus();
+				if (featureStatus != 3) {
+					newFeature[j] = features[j];
+				}
+			}
+			back.setFeatures(newFeature);
+			listNewBacklog.add(back);
+		}
+		return listNewBacklog;
 //		return sprintsAppRepository.findByStatus();
 
 	}
