@@ -9,9 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.SimpleMongoClientDbFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -26,13 +23,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.google.gson.Gson;
-import com.mongodb.client.MongoClients;
 import com.redhat.bluesmile.sprintsapp.exception.ResourceNotFoundException;
 import com.redhat.bluesmile.sprintsapp.model.BackLog;
 import com.redhat.bluesmile.sprintsapp.model.Features;
 import com.redhat.bluesmile.sprintsapp.model.Issue;
 import com.redhat.bluesmile.sprintsapp.model.Noti;
-import com.redhat.bluesmile.sprintsapp.repository.SprintsAppFeatureRepository;
+//import com.redhat.bluesmile.sprintsapp.repository.SprintsAppFeatureRepository;
 import com.redhat.bluesmile.sprintsapp.repository.SprintsAppRepository;
 import com.redhat.bluesmile.sprintsapp.service.SequenceGeneratorService;
 
@@ -51,21 +47,17 @@ public class SprintsAppController {
 
 	@Autowired
 	private SequenceGeneratorService sequenceGeneratorService;
-	
-	MongoOperations mongoOps = new MongoTemplate(new SimpleMongoClientDbFactory(MongoClients.create(), "usuariodb"));
 
 	@GetMapping("/backlog")
 	public List<BackLog> getAllBacklog() {
-		
-	//backLogNULL = mongoOps.findOne(new Query(where("name").is("Joe")), BackLog.class);
 
 		List<BackLog> backLog = sprintsAppRepository.findByStatus();
 
 		List<BackLog> listNewBacklog = new ArrayList<BackLog>();
 		for (int i = 0; i < backLog.size(); i++) {
 			BackLog back = backLog.get(i);
-		Features[] features = back.getFeatures();
-		Features[] newFeature = new Features[features.length];
+			Features[] features = back.getFeatures();
+			Features[] newFeature = new Features[features.length];
 			for (int j = 0; j < features.length; j++) {
 				int featureStatus = features[j].getStatus();
 				if (featureStatus != 3) {
@@ -76,7 +68,8 @@ public class SprintsAppController {
 			listNewBacklog.add(back);
 		}
 		return listNewBacklog;
-//		return sprintsAppRepository.findByStatus();
+
+//		return sprintsAppRepository.findByStatus(3);
 
 	}
 
@@ -85,6 +78,16 @@ public class SprintsAppController {
 
 		BackLog backLog = sprintsAppRepository.findById(backlogId)
 				.orElseThrow(() -> new ResourceNotFoundException("El BackLog not found for this id :: " + backlogId));
+
+		Features[] features = backLog.getFeatures();
+		Features[] newFeature = new Features[features.length];
+		for (int i = 0; i < features.length; i++) {
+			int featureStatus = features[i].getStatus();
+			if (featureStatus != 3) {
+				newFeature[i] = features[i];
+			}
+		}
+		backLog.setFeatures(newFeature);
 
 		return ResponseEntity.ok().body(backLog);
 	}
@@ -213,8 +216,8 @@ public class SprintsAppController {
 
 //	---------------------------------------------------------FEATURES---------------------------------------------------------------
 
-	@Autowired
-	SprintsAppFeatureRepository sprintsAppFeatureRepository;
+//	@Autowired
+//	SprintsAppFeatureRepository sprintsAppFeatureRepository;
 
 	@GetMapping("/features")
 	public List<Features> getAllFeatures() {
@@ -466,7 +469,7 @@ public class SprintsAppController {
 						issueFind[i].setProject(issueDetails.getProject());
 						issueFind[i].setCreatedAt(new Date());
 						issueFind[i].setEstado(issueDetails.getEstado());
-
+						
 						backlogFeature.setIssues(issueFind);
 
 						sprintsAppRepository.save(backlogs);

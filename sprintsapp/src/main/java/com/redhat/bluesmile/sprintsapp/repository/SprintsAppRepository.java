@@ -19,16 +19,16 @@ public interface SprintsAppRepository extends MongoRepository<BackLog, Long> {
 	@Query("{ $or: [ { status: 0 }, { status: 1 }, { status: 2 } ] }")//, 'features.status': { '$lte': 2 } 
 	List<BackLog> findByStatus();
 
-//	@Query("{ $project: { features: { $filter: { input: \"$features\", as: \"features\", cond: { $lte: [ \"$$features.status\", 2 ] } } } } }")
-//	List<BackLog> findByStatus();
+//	@Query("{ $or: [ { status: 0 }, { status: 1 }, { status: 2 } ] }")
+//	List<BackLog> findByStatus(int status);
+
+//	@Query("{ 'features.status': { '$lte': 2 } },{features:1,_id:0}")
+//	BackLog findByStatusFeatures();
 	
-	@Query("{ 'features.status': { '$lte': 2 } },{features:1,_id:0}")
-	BackLog findByStatusFeatures();
-
-	@Query("{ 'features.status': { '$lte': 2 } },{ _id:0, features:1 }")
-	List<BackLog> findByStatusFeaturez();
-
-	List<BackLog> findFeaturesByStatus();
+//	@Query("{ 'features.status': { '$lte': 2 } },{ _id:0, features:1 }")
+//	List<BackLog> findByStatusFeaturez();
+	
+//	List<BackLog> findFeaturesByStatus(int status);
 
 //	@Query(value = "{ 'features._id': ?0 }", fields = "{_id:0,'features.$':1}")
 //	BackLog findOne(Long featuresId);
